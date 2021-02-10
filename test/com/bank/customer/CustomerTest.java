@@ -74,16 +74,12 @@ class CustomerTest {
 
     @Test
     void customer_hasGender(){
-        newCustomer.setGender("Male");
+       newCustomer.setGender("Male");
         System.out.println(newCustomer.displayUser());
-        assertEquals("Male", newCustomer.getGender());
-
+       assertEquals("Male", newCustomer.getGender());
     }
 
-    @Test
-    void checkIfAccountNumberCanBeGenerated(){
-        String firstAccountNumber = newCustomer.generateAccountNumber();
-        String secondAccountNumber = newCustomer.generateAccountNumber();
-        assertNotEquals(firstAccountNumber, secondAccountNumber);
-    }
+
+
+
 }

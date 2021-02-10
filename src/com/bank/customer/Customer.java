@@ -1,5 +1,6 @@
 package com.bank.customer;
-import java.util.Random;
+
+
 
 public class Customer {
 
@@ -79,15 +80,9 @@ public class Customer {
     }
 
     public String  displayUser(){
-        return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nOccupation:%s%nAddress: %s%n" +
-                        "Phone number: %s%nGender: %s%nAccount number: %s%n",
-                firstName, lastName, dateOfBirth, occupation,address, phoneNumber, gender, generateAccountNumber());
+        return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nOccupation:%s%nAddress: %s%nPhone number: %s%nGender: %s",
+                firstName, lastName, dateOfBirth, occupation,address, phoneNumber, gender);
     }
 
 
-    public String generateAccountNumber() {
-        Random rand = new Random();
-        long limit = (long)(rand.nextDouble()*10000000000L);
-        return String.valueOf(limit);
-    }
 }
