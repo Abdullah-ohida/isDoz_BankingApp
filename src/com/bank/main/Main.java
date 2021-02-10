@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class Main {
  private static BankDatabase database = new BankDatabase("Union Bank");
+
     public static void main(String[] args) {
 
         Scanner getUserInput = new Scanner(System.in);
@@ -15,26 +16,33 @@ public class Main {
         options = getUserInput.nextInt();
 
 
+
         while (options != 0){
             switchMethod(options);
             displayServiceOptions();
             options = getUserInput.nextInt();
 
-            if (options < 1 || options > 7){
+            if (options < 0 || options > 6){
                 System.out.println("Your option should be within 1 - 6\n");
             }
         }
     }
 
+    public static void entryPoint(int options){
+        Scanner userInput = new Scanner(System.in);
+        System.out.print("Press 9 to see our service options: ");
+        options = userInput.nextInt();
+    }
+
     public static void displayServiceOptions(){
-        System.out.println("Press 1 to create account with us");
-        //if the account number exists it shout say account exists
-        System.out.println("press 2 to view your your balance");
-        System.out.println("press 3 to view your profile");
-        System.out.println("press 4 to close your account");
-        System.out.println("press 5 to ask for a loan");
-        System.out.println("Press 0 to quit");
-        System.out.println();
+        System.out.print("Our Services: \n");
+        System.out.println("\t\tPress 1 to create account with us");
+        System.out.println("\t\tpress 2 to view your your balance");
+        System.out.println("\t\tpress 3 to view your profile");
+        System.out.println("\t\tpress 4 to delete and close your account");
+        System.out.println("\t\tpress 5 to ask for a loan");
+        System.out.println("\t\tPress 0 to quit\n");
+
         System.out.print("Enter your option here: ");
     }
 
@@ -71,12 +79,12 @@ public class Main {
         System.out.print("Enter phone number: ");
         String phoneNumber = userInput.nextLine();
 
-        System.out.println("Enter your gender: ");
+        System.out.print("Enter your gender: ");
         String gender = userInput.nextLine();
 
         Customer customer = new Customer(firstName, lastName, dateOfBirth, occupation, address, phoneNumber, gender);
         database.addCustomerToDatabases(customer);
-        System.out.println("Account created successfully");
+        System.out.println("Account created successfully\n");
     }
 
     private static void makeTransactions(){
@@ -86,18 +94,24 @@ public class Main {
     private static void viewProfile() {
         Scanner userInput = new Scanner(System.in);
 
-        System.out.print("Enter your first name to view profile");
+        System.out.print("Enter your first name to view profile: ");
         String viewProfile = userInput.nextLine();
         database.printCustomerDetails(viewProfile);
     }
 
     private static void deleteAccount() {
         Scanner userInput = new Scanner(System.in);
+        System.out.print("Do you want to delete your account (Y for delete/N for exit): ");
+        String wantToDelete = userInput.nextLine().toLowerCase();
 
-        System.out.print("Enter your first name to delete your account: ");
-        String deleteAccount = userInput.nextLine();
-        database.deleteCustomerFromDatabase(deleteAccount);
-        System.out.println("Account deleted successfully");
+        if (wantToDelete.equals("y")){
+            System.out.print("Enter your first name to delete your account: ");
+            String deleteAccount = userInput.nextLine();
+            database.deleteCustomerFromDatabase(deleteAccount);
+            System.out.println("Account deleted successfully\n");
+
+        }else
+            displayServiceOptions();
     }
 
     private static void getLoan() {
