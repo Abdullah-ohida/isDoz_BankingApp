@@ -5,6 +5,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.BooleanSupplier;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankDatabaseTest {
@@ -36,35 +38,38 @@ class BankDatabaseTest {
     void database_canAddCustomerToDataBase(){
         database.addCustomerToDatabases(newCustomer);
         assertEquals(1, database.getDatabaseLength());
+
         Customer newCustomer = new Customer("Chibuzo","Angel Gebu", "12/5/2031", "Software Engineer", "Semicolon", "099329838738732", "Male");
         database.addCustomerToDatabases(newCustomer);
         assertEquals(2, database.getDatabaseLength());
+
+        database.addCustomerToDatabases(newCustomer);
+        assertEquals(2, database.getDatabaseLength());
+
     }
 
     @Test
     void database_canPrintOutASpecificCustomerDetails(){
         database.addCustomerToDatabases(newCustomer);
         database.addCustomerToDatabases(anotherCustomer);
-        boolean itExist = database.printCustomerDetails("Abdullah");
-        assertTrue(itExist);
-        assertEquals(2, database.getDatabaseLength());
+        Customer itExist = database.printCustomerDetails("Abdullah");
+        assertNotNull(itExist);
     }
 
     @Test
     void database_canDeleteACustomerDetails(){
         database.addCustomerToDatabases(newCustomer);
         database.addCustomerToDatabases(anotherCustomer);
-        boolean isDeleted = database.deleteCustomerFromDatabase("Abdullah");
-        assertTrue(isDeleted);
-        assertEquals(1, database.getDatabaseLength());
+        Customer isDeleted = database.deleteCustomerFromDatabase("Abdullah");
+        assertNull(isDeleted);
     }
 
     @Test
     void database_canUpdateCustomerDetails(){
         database.addCustomerToDatabases(newCustomer);
         database.addCustomerToDatabases(anotherCustomer);
-
-        boolean isUpdated = database.updateCustomerDetails("Abdullah", anotherCustomer1);
+        Customer isUpdated = database.updateCustomerDetails("Abdullah", anotherCustomer1);
+        assertNotNull(isUpdated);
         assertEquals("Hammend", anotherCustomer1.getFirstName());
     }
 }
