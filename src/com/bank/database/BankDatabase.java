@@ -17,6 +17,7 @@ public class BankDatabase {
         return customers.size();
     }
 
+
     public boolean addCustomerToDatabases(Customer newCustomer) {
         if(findCustomer(newCustomer.getFirstName()) != null){
             return false;
@@ -52,5 +53,26 @@ public class BankDatabase {
             return true;
         }
         return false;
+    }
+
+    public boolean updateCustomerDetails(String currentName, Customer updateCustomer) {
+        Customer customer = findCustomer(currentName);
+        if(customer != null){
+            int position = findCustomerPosition(customer.getFirstName());
+            customers.set(position, updateCustomer);
+            return true;
+        }
+      return false;
+    }
+
+    private int findCustomerPosition(String customerName) {
+        int position = -1;
+        for (int count = 0; count < customers.size(); count++){
+            String checkedName = customers.get(count).getFirstName();
+            if(checkedName.equals(customerName)){
+                position = count;
+            }
+        }
+        return position;
     }
 }
