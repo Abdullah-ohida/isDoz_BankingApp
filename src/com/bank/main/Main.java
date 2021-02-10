@@ -1,11 +1,12 @@
 package com.bank.main;
 
 import com.bank.customer.Customer;
+import com.bank.database.BankDatabase;
 
 import java.util.Scanner;
 
 public class Main {
-
+ private static BankDatabase database = new BankDatabase("Union Bank");
     public static void main(String[] args) {
 
         Scanner getUserInput = new Scanner(System.in);
@@ -29,10 +30,12 @@ public class Main {
         System.out.println("Press 1 to create account with us");
         //if the account number exists it shout say account exists
         System.out.println("press 2 to view your your balance");
-        System.out.println("press 3 to make a deposit");
-        System.out.println("press 4 to withdraw");
+        System.out.println("press 3 to view your profile");
+        System.out.println("press 4 to close your account");
         System.out.println("press 5 to ask for a loan");
         System.out.println("Press 0 to quit");
+        System.out.println();
+        System.out.print("Enter your option here: ");
     }
 
     public static void switchMethod(int options){
@@ -71,6 +74,8 @@ public class Main {
         String gender = userInput.nextLine();
 
         Customer customer = new Customer(firstName, lastName, dateOfBirth, occupation, address, phoneNumber, gender);
+        database.addCustomerToDatabases(customer);
+        System.out.println("Account created successfully");
     }
 
     private static void makeTransactions(){
@@ -80,6 +85,11 @@ public class Main {
     }
 
     private static void viewProfile() {
+        Scanner userInput = new Scanner(System.in);
+
+        System.out.println("Enter Your name to view profile");
+        String viewProfile = userInput.nextLine();
+        database.printCustomerDetails(viewProfile);
     }
 
     private static void deleteAccount() {
