@@ -5,8 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BankDatabaseTest {
     BankDatabase database;
@@ -39,9 +38,17 @@ class BankDatabaseTest {
     void database_canPrintOutASpecificCustomerDetails(){
         database.addCustomerToDatabases(newCustomer);
         database.addCustomerToDatabases(anotherCustomer);
-        database.printCustomerDetails("Abdullah");
-        database.printCustomerDetails("DonDozie");
-
+        boolean itExist = database.printCustomerDetails("Abdullah");
+        assertTrue(itExist);
         assertEquals(2, database.getDatabaseLength());
+    }
+
+    @Test
+    void database_canDeleteACustomerDetails(){
+        database.addCustomerToDatabases(newCustomer);
+        database.addCustomerToDatabases(anotherCustomer);
+        boolean isDeleted = database.deleteCustomerFromDatabase("Abdullah");
+        assertTrue(isDeleted);
+        assertEquals(1, database.getDatabaseLength());
     }
 }
