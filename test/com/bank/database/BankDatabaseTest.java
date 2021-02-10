@@ -36,6 +36,9 @@ class BankDatabaseTest {
     void database_canAddCustomerToDataBase(){
         database.addCustomerToDatabases(newCustomer);
         assertEquals(1, database.getDatabaseLength());
+        Customer newCustomer = new Customer("Chibuzo","Angel Gebu", "12/5/2031", "Software Engineer", "Semicolon", "099329838738732", "Male");
+        database.addCustomerToDatabases(newCustomer);
+        assertEquals(2, database.getDatabaseLength());
     }
 
     @Test
