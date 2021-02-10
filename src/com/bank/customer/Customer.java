@@ -11,7 +11,6 @@ public class Customer {
     private String address;
     private String phoneNumber;
     private String gender;
-    private String paper;
 
     public Customer(String firstName, String lastName, String dateOfBirth, String occupation, String address, String phoneNumber, String gender) {
         this.firstName = firstName;
@@ -21,9 +20,6 @@ public class Customer {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.paper = "hello";
-
-
     }
 
     public String getFirstName() {
