@@ -45,6 +45,7 @@ public class Main {
             case 3 -> viewProfile();
             case 4 -> deleteAccount();
             case 5 -> getLoan();
+            case 6 -> updateAccountInformation();
         }
 
     }
@@ -80,21 +81,28 @@ public class Main {
 
     private static void makeTransactions(){
         Scanner userInput = new Scanner(System.in);
-
-
     }
 
     private static void viewProfile() {
         Scanner userInput = new Scanner(System.in);
 
-        System.out.println("Enter Your name to view profile");
+        System.out.print("Enter your first name to view profile");
         String viewProfile = userInput.nextLine();
         database.printCustomerDetails(viewProfile);
     }
 
     private static void deleteAccount() {
+        Scanner userInput = new Scanner(System.in);
+
+        System.out.print("Enter your first name to delete your account: ");
+        String deleteAccount = userInput.nextLine();
+        database.deleteCustomerFromDatabase(deleteAccount);
+        System.out.println("Account deleted successfully");
     }
 
     private static void getLoan() {
+    }
+
+    private static void updateAccountInformation() {
     }
 }
