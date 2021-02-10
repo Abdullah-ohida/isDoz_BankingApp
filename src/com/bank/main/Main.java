@@ -1,28 +1,28 @@
 package com.bank.main;
 
+import com.bank.customer.Customer;
+
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner getUserInput = new Scanner(System.in);
 
+    public static void main(String[] args) {
+
+        Scanner getUserInput = new Scanner(System.in);
         int options ;
         displayServiceOptions();
         options = getUserInput.nextInt();
 
 
         while (options != 0){
+            switchMethod(options);
             displayServiceOptions();
             options = getUserInput.nextInt();
 
             if (options < 1 || options > 7){
                 System.out.println("Your option should be within 1 - 6\n");
-
             }
         }
-
-
-
     }
 
     public static void displayServiceOptions(){
@@ -46,18 +46,45 @@ public class Main {
 
     }
 
-    private static void getLoan() {
+    private static void createAccountMethod() {
+        Scanner userInput = new Scanner(System.in);
+
+        System.out.print("Enter your first name: ");
+        String firstName = userInput.nextLine();
+
+        System.out.print("Enter your last name: ");
+        String lastName = userInput.nextLine();
+
+        System.out.print("Enter your date of birth dd/mm/yyyy: ");
+        String dateOfBirth = userInput.nextLine();
+
+        System.out.print("Enter your occupation: ");
+        String occupation = userInput.nextLine();
+
+        System.out.print("Enter your address: ");
+        String address = userInput.nextLine();
+
+        System.out.print("Enter phone number: ");
+        String phoneNumber = userInput.nextLine();
+
+        System.out.println("Enter your gender: ");
+        String gender = userInput.nextLine();
+
+        Customer customer = new Customer(firstName, lastName, dateOfBirth, occupation, address, phoneNumber, gender);
     }
 
-    private static void deleteAccount() {
+    private static void makeTransactions(){
+        Scanner userInput = new Scanner(System.in);
+
+
     }
 
     private static void viewProfile() {
     }
 
-    private static void makeTransactions() {
+    private static void deleteAccount() {
     }
 
-    private static void createAccountMethod() {
+    private static void getLoan() {
     }
 }
