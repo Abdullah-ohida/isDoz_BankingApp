@@ -18,7 +18,7 @@ public class BankDatabase {
     }
 
     public boolean addCustomerToDatabases(Customer newCustomer) {
-        if(findCustomer(newCustomer.getFirstName())){
+        if(findCustomer(newCustomer.getFirstName()) != null){
             System.out.println("Customer Already Exit On Our PlatForm.");
             return false;
         }
@@ -26,14 +26,20 @@ public class BankDatabase {
         return true;
     }
 
-    private boolean findCustomer(String customerName){
+    private Customer findCustomer(String customerName){
         for(Customer customer : customers){
             if(customer.getFirstName().equals(customerName)){
-                return true;
+                return customer;
             }
         }
-        return false;
+        return null;
     }
 
 
+    public void printCustomerDetails(String customerName) {
+        Customer customer = findCustomer(customerName);
+        System.out.println("Here is your details. \n===================================\n");
+        assert customer != null;
+        System.out.println(customer.displayUser());
+    }
 }
