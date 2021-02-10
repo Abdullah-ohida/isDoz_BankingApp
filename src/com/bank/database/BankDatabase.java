@@ -19,11 +19,13 @@ public class BankDatabase {
 
 
     public boolean addCustomerToDatabases(Customer newCustomer) {
+        boolean customerExist = true;
         if(findCustomer(newCustomer.getFirstName()) != null){
-            return false;
+            customerExist = false;
+        }else {
+            customers.add(newCustomer);
         }
-        customers.add(newCustomer);
-        return true;
+       return customerExist;
     }
 
     private Customer findCustomer(String customerName){
@@ -36,33 +38,29 @@ public class BankDatabase {
     }
 
 
-    public boolean printCustomerDetails(String customerName) {
+    public Customer printCustomerDetails(String customerName) {
         Customer customer = findCustomer(customerName);
         if(customer != null) {
             System.out.println("Here is your details. \n===================================\n");
             System.out.println(customer.displayUser());
-            return true;
         }
-        return false;
+        return customer;
     }
 
-    public boolean deleteCustomerFromDatabase(String customerName) {
+    public Customer deleteCustomerFromDatabase(String customerName) {
         Customer customer = findCustomer(customerName);
-        if(customer != null){
+        if(customer != null)
             customers.remove(customer);
-            return true;
-        }
-        return false;
+        return null;
     }
 
-    public boolean updateCustomerDetails(String currentName, Customer updateCustomer) {
+    public Customer updateCustomerDetails(String currentName, Customer updateCustomer) {
         Customer customer = findCustomer(currentName);
         if(customer != null){
             int position = findCustomerPosition(customer.getFirstName());
             customers.set(position, updateCustomer);
-            return true;
         }
-      return false;
+      return customer;
     }
 
     private int findCustomerPosition(String customerName) {
