@@ -20,9 +20,6 @@ public class Customer {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-
-
-
     }
 
     public String getFirstName() {
