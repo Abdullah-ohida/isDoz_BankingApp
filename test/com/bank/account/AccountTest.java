@@ -23,7 +23,7 @@ class AccountTest {
     }
 
     @Test
-    void account_generatedAreNotTheSame(){
+    void accountNumber_generatedAreNotTheSame(){
         assertNotEquals(firstAccount.getAccountNumber(), secondAccount.getAccountNumber());
     }
 

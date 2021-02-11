@@ -59,7 +59,7 @@ class TransactionTest {
         assertEquals(700, account.getAccountBalance());
 
         transaction = new Transaction(accountNumber, 700,account.getTransactionType());
-        assertEquals(accountNumber, account.getAccountNumber());
+        assertEquals(accountNumber, transaction.getAccountNumber());
     }
 
 
