@@ -1,9 +1,11 @@
 package com.bank.customer;
 
 
+import com.bank.account.Account;
+
+import java.util.ArrayList;
 
 public class Customer {
-
     private String firstName;
     private String lastName;
     private String dateOfBirth;
@@ -11,6 +13,7 @@ public class Customer {
     private String address;
     private String phoneNumber;
     private String gender;
+    private ArrayList<Account> accounts;
 
     public Customer(String firstName, String lastName, String dateOfBirth, String occupation, String address, String phoneNumber, String gender) {
         this.firstName = firstName;
@@ -20,6 +23,7 @@ public class Customer {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
+        accounts = new ArrayList<>();
     }
 
     public String getFirstName() {

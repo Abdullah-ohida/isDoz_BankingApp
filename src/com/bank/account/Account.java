@@ -1,6 +1,7 @@
 package com.bank.account;
 
 import com.bank.transaction.Transaction;
+import com.bank.transaction.TransactionType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,11 +11,16 @@ public class Account {
     private String accountNumber;
     private AccountType accountType;
     private ArrayList<Transaction> transactions;
+    private TransactionType transactionType;
 
 
     public Account(AccountType accountType) {
         this.accountNumber = generateAccountNumber();
         this.accountType = accountType;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
     }
 
     public double getAccountBalance() {
@@ -35,25 +41,49 @@ public class Account {
         return accountType;
     }
 
-    public void deposit(String accountNumber, int amount) {
+    public void setTransactionType(TransactionType transactionType, boolean isSuccessful) {
+        if (isSuccessful){
+            this.transactionType = transactionType;
+        }
+
+    }
+
+    public boolean performTransaction(TransactionType transactionType, String accountNumber, int amount){
+        this.transactionType = transactionType;
+        boolean isSuccessful;
+        if(transactionType == TransactionType.WITHDRAWAL){
+           isSuccessful = withdrawal(accountNumber, amount);
+           setTransactionType(transactionType, isSuccessful);
+        }else {
+            isSuccessful = deposit(accountNumber, amount);
+        }
+        return isSuccessful;
+    }
+
+    public boolean deposit(String accountNumber, int amount) {
         final double MINIMUM_AMOUNT = 0.0;
+        boolean isValid = false;
         if(checkAccountNumber(accountNumber)){
             if(amount > MINIMUM_AMOUNT){
                 balance += amount;
+                isValid = true;
             }
         }
+        return isValid;
     }
 
     private boolean checkAccountNumber(String accountNumber) {
         return this.accountNumber.equals(accountNumber);
     }
 
-    public void withdrawal(String accountNumber, int amount) {
+    boolean withdrawal(String accountNumber, int amount) {
+        boolean isValid = false;
         if(checkAccountNumber(accountNumber)){
             if(amount <= balance){
                 balance -= amount;
+                isValid = true;
             }
         }
+        return isValid;
     }
-
 }
