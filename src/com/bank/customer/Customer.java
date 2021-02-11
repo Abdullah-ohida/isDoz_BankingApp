@@ -3,7 +3,6 @@ package com.bank.customer;
 
 import com.bank.account.Account;
 import com.bank.account.AccountType;
-import java.util.ArrayList;
 
 public class Customer {
     private String firstName;
@@ -13,7 +12,6 @@ public class Customer {
     private String address;
     private String phoneNumber;
     private String gender;
-    private ArrayList<Account> accounts;
     private Account account;
 
     public Customer(String firstName, String lastName, String dateOfBirth, String occupation, String address, String phoneNumber, String gender, String accountType) {
@@ -24,8 +22,6 @@ public class Customer {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-        accounts = new ArrayList<>();
-
         if(accountType.equals("savings"))
             this.account = new Account(AccountType.SAVINGS);
         else
