@@ -20,7 +20,7 @@ public class BankDatabase {
 
     public boolean addCustomerToDatabases(Customer newCustomer) {
         boolean customerExist = true;
-        if(findCustomer(newCustomer.getFirstName()) != null){
+        if(checkIfCustomerExist(findCustomer(newCustomer.getAccount().getAccountNumber()))){
             customerExist = false;
         }else {
             customers.add(newCustomer);
@@ -28,9 +28,9 @@ public class BankDatabase {
        return customerExist;
     }
 
-    private Customer findCustomer(String customerName){
+    private Customer findCustomer(String accountNumber){
         for(Customer customer : customers){
-            if(customer.getFirstName().equals(customerName)){
+            if(customer.getAccount().getAccountNumber().equals(accountNumber)){
                 return customer;
             }
         }
@@ -38,36 +38,39 @@ public class BankDatabase {
     }
 
 
-    public Customer printCustomerDetails(String customerName) {
-        Customer customer = findCustomer(customerName);
-        if(customer != null) {
-            System.out.println("Here is your details. \n===================================\n");
+    public Customer printCustomerDetails(String accountNumber) {
+        Customer customer = findCustomer(accountNumber);
+        if(checkIfCustomerExist(customer)) {
+            System.out.println("Here is your details. \n===================================");
             System.out.println(customer.displayUser());
         }
         return customer;
     }
 
-    public Customer deleteCustomerFromDatabase(String customerName) {
-        Customer customer = findCustomer(customerName);
-        if(customer != null)
-            customers.remove(customer);
-        return null;
+    public Customer deleteCustomerFromDatabase(String accountNumber) {
+        Customer customer = findCustomer(accountNumber);
+        customers.remove(customer);
+        return customer;
     }
 
-    public Customer updateCustomerDetails(String currentName, Customer updateCustomer) {
-        Customer customer = findCustomer(currentName);
-        if(customer != null){
-            int position = findCustomerPosition(customer.getFirstName());
+    private boolean checkIfCustomerExist(Customer customer) {
+        return customer != null;
+    }
+
+    public Customer updateCustomerDetails(String accountNumber, Customer updateCustomer) {
+        Customer customer = findCustomer(accountNumber);
+        if(checkIfCustomerExist(customer)){
+            int position = findCustomerPosition(customer.getAccount().getAccountNumber());
             customers.set(position, updateCustomer);
         }
       return customer;
     }
 
-    private int findCustomerPosition(String customerName) {
+    private int findCustomerPosition(String accountNumber) {
         int position = -1;
         for (int count = 0; count < customers.size(); count++){
-            String checkedName = customers.get(count).getFirstName();
-            if(checkedName.equals(customerName)){
+            String checkedAccountNumber = customers.get(count).getAccount().getAccountNumber();
+            if(checkedAccountNumber.equals(accountNumber)){
                 position = count;
             }
         }

@@ -92,8 +92,8 @@ public class Customer {
     }
 
     public String  displayUser(){
-        return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nOccupation:%s%nAddress: %s%nPhone number: %s%nGender: %s%n",
-                firstName, lastName, dateOfBirth, occupation,address, phoneNumber, gender);
+        return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nOccupation:%s%nAddress: %s%nPhone number: %s%nGender: %s%nAccount number: %s%nAccount balance: %s%nAccount type: %s BANK",
+                firstName, lastName, dateOfBirth, occupation,address, phoneNumber, gender, account.getAccountNumber(), account.getAccountBalance(), account.getAccountType());
     }
 
 

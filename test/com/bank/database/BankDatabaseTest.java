@@ -52,7 +52,7 @@ class BankDatabaseTest {
     void database_canPrintOutASpecificCustomerDetails(){
         database.addCustomerToDatabases(newCustomer);
         database.addCustomerToDatabases(anotherCustomer);
-        Customer itExist = database.printCustomerDetails("Abdullah");
+        Customer itExist = database.printCustomerDetails(newCustomer.getAccount().getAccountNumber());
         assertNotNull(itExist);
     }
 
@@ -68,7 +68,7 @@ class BankDatabaseTest {
     void database_canUpdateCustomerDetails(){
         database.addCustomerToDatabases(newCustomer);
         database.addCustomerToDatabases(anotherCustomer);
-        Customer isUpdated = database.updateCustomerDetails("Abdullah", anotherCustomer1);
+        Customer isUpdated = database.updateCustomerDetails(anotherCustomer.getAccount().getAccountNumber(), anotherCustomer1);
         assertNotNull(isUpdated);
         assertEquals("Hammend", anotherCustomer1.getFirstName());
     }
