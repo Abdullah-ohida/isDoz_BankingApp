@@ -19,13 +19,13 @@ class BankDatabaseTest {
     void setUp() {
         database = new BankDatabase("Union Bank");
         newCustomer =  new Customer("DonDozie", "MoneyMan", "19/8/1900",
-                "Software Engineer", "Sabo", "12345677", "Male");
+                "Software Engineer", "Sabo", "12345677", "Male", "savings");
 
        anotherCustomer =  new Customer("Abdullah", "Ismail", "19/8/1900",
-                "Software Engineer", "Sabo", "12345677", "Male");
+                "Software Engineer", "Sabo", "12345677", "Male", "current");
 
         anotherCustomer1 =  new Customer("Hammend", "Ismail", "19/8/1900",
-                "Software Engineer", "Sabo", "8934983498", "Male");
+                "Software Engineer", "Sabo", "8934983498", "Male", "savings");
     }
 
     @AfterEach
@@ -39,7 +39,7 @@ class BankDatabaseTest {
         database.addCustomerToDatabases(newCustomer);
         assertEquals(1, database.getDatabaseLength());
 
-        Customer newCustomer = new Customer("Chibuzo","Angel Gebu", "12/5/2031", "Software Engineer", "Semicolon", "099329838738732", "Male");
+        Customer newCustomer = new Customer("Chibuzo","Angel Gebu", "12/5/2031", "Software Engineer", "Semicolon", "099329838738732", "Male", "savings");
         database.addCustomerToDatabases(newCustomer);
         assertEquals(2, database.getDatabaseLength());
 

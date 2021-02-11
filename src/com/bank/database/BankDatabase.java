@@ -10,7 +10,7 @@ public class BankDatabase {
 
     public BankDatabase(String name) {
         this.name = name;
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public int getDatabaseLength() {

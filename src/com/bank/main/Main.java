@@ -82,7 +82,10 @@ public class Main {
         System.out.print("Enter your gender: ");
         String gender = userInput.nextLine();
 
-        Customer customer = new Customer(firstName, lastName, dateOfBirth, occupation, address, phoneNumber, gender);
+        System.out.print("Enter account type: ");
+        String accountType = userInput.nextLine();
+
+        Customer customer = new Customer(firstName, lastName, dateOfBirth, occupation, address, phoneNumber, gender, accountType);
         database.addCustomerToDatabases(customer);
         System.out.println("Account created successfully\n");
     }
