@@ -13,7 +13,7 @@ class CustomerTest {
     @BeforeEach
     void setUp() {
         newCustomer = new Customer("DonDozie", "MoneyMan", "19/8/1900",
-                "Software Engineer", "Sabo", "12345677", "Male");
+                "Software Engineer", "Sabo", "12345677", "Male", "savings");
     }
 
     @AfterEach
@@ -79,6 +79,10 @@ class CustomerTest {
        assertEquals("Male", newCustomer.getGender());
     }
 
+    @Test
+    void customer_hasAccountNumber(){
+        assertNotNull(newCustomer.getAccount().getAccountNumber());
+    }
 
 
 
