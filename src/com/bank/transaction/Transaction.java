@@ -12,6 +12,7 @@ public class Transaction {
         this.accountNumber = accountNumber;
         transactionAmount = amount;
         this.transactionType = transactionType;
+        localDate = LocalDate.now();
     }
 
     public String getAccountNumber() {
@@ -20,6 +21,10 @@ public class Transaction {
 
     public int getTransactionAmount() {
         return transactionAmount;
+    }
+    
+    public String showAlert(){
+        return String.format("Account number: %s%nAccount type: %s%nAmount transact: Date: %s", accountNumber, transactionType, transactionAmount, localDate.getDayOfWeek() + "/" + localDate.getMonth() + "/" + localDate.getYear());
     }
 
 }

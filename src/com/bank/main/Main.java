@@ -6,7 +6,7 @@ import com.bank.database.BankDatabase;
 import java.util.Scanner;
 
 public class Main {
- private static BankDatabase database = new BankDatabase("Union Bank");
+ private static BankDatabase database = new BankDatabase();
 
     public static void main(String[] args) {
 

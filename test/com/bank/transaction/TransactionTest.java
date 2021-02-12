@@ -63,5 +63,20 @@ class TransactionTest {
     }
 
 
+    @Test
+    void transaction_canShowMessage(){
+        String accountNumber = account.getAccountNumber();
+        int salary = 6000;
+
+        boolean isSuccessful = account.performTransaction(TransactionType.DEPOSIT, accountNumber, salary);
+        assertTrue(isSuccessful);
+        assertEquals(6000, account.getAccountBalance());
+
+
+        transaction = new Transaction(accountNumber, 2000, account.getTransactionType());
+
+        System.out.println(transaction.showAlert());
+        assertNotNull(transaction.showAlert());
+    }
 
 }

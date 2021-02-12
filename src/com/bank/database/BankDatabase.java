@@ -5,11 +5,9 @@ import com.bank.customer.Customer;
 import java.util.ArrayList;
 
 public class BankDatabase {
-    private String name;
     private ArrayList<Customer> customers;
 
-    public BankDatabase(String name) {
-        this.name = name;
+    public BankDatabase() {
         customers = new ArrayList<>();
     }
 

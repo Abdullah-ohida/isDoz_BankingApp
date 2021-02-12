@@ -5,8 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.function.BooleanSupplier;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankDatabaseTest {
@@ -17,7 +15,7 @@ class BankDatabaseTest {
 
     @BeforeEach
     void setUp() {
-        database = new BankDatabase("Union Bank");
+        database = new BankDatabase();
         newCustomer =  new Customer("DonDozie", "MoneyMan", "19/8/1900",
                 "Software Engineer", "Sabo", "12345677", "Male", "savings");
 
