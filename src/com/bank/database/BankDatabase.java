@@ -39,7 +39,7 @@ public class BankDatabase {
         Customer customer = findCustomer(accountNumber);
         if(checkIfCustomerExist(customer)) {
             System.out.println("Here is your details. \n===================================");
-            System.out.println(customer.displayUser());
+            System.out.println(toString());
         }
         return customer;
     }

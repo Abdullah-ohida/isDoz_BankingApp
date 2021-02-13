@@ -69,7 +69,7 @@ class CustomerTest {
     @Test
     void customer_hasGender(){
        newCustomer.setGender("Male");
-        System.out.println(newCustomer.displayUser());
+        System.out.println(toString());
        assertEquals("Male", newCustomer.getGender());
     }
 

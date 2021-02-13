@@ -88,7 +88,8 @@ public class Customer {
         return account;
     }
 
-    public String  displayUser(){
+    @Override
+    public String toString() {
         return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nAge: %s%nOccupation:%s%nAddress: %s%nPhone number: %s%nGender: %s%nAccount number: %s%nAccount balance: %s%nAccount type: %s BANK",
                 firstName, lastName, dateOfBirth.dateOfBirthToString(), calculateAge(), occupation,address, phoneNumber, gender, account.getAccountNumber(), account.getAccountBalance(), account.getAccountType());
     }
