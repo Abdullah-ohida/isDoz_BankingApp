@@ -3,25 +3,31 @@ package com.bank.customer;
 
 import com.bank.account.Account;
 import com.bank.account.AccountType;
+import com.bank.date.DateAndTime;
+
+import java.time.LocalDate;
 
 public class Customer {
     private String firstName;
     private String lastName;
-    private String dateOfBirth;
     private String occupation;
     private String address;
     private String phoneNumber;
     private String gender;
-    private Account account;
+    private int yearOfBirth;
+    private int monthOfBirth;
+    private int dayOfBirth;
+    private final Account account;
+    private DateAndTime dateOfBirth;
 
-    public Customer(String firstName, String lastName, String dateOfBirth, String occupation, String address, String phoneNumber, String gender, String accountType) {
+    public Customer(String firstName, String lastName, String occupation, String address, String phoneNumber, String gender, String accountType, int yearOfBirth, int monthOfBirth, int dayOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
         this.occupation = occupation;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
+        dateOfBirth = new DateAndTime(yearOfBirth, monthOfBirth, dayOfBirth);
         if(accountType.equals("savings"))
             this.account = new Account(AccountType.SAVINGS);
         else
@@ -44,15 +50,6 @@ public class Customer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-
-    public void setDateOfBirth(String dataOfBirth){
-        this.dateOfBirth = dataOfBirth;
     }
 
     public void setOccupation(String occupation) {
@@ -92,10 +89,27 @@ public class Customer {
     }
 
     public String  displayUser(){
-        return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nOccupation:%s%nAddress: %s%nPhone number: %s%nGender: %s%nAccount number: %s%nAccount balance: %s%nAccount type: %s BANK",
-                firstName, lastName, dateOfBirth, occupation,address, phoneNumber, gender, account.getAccountNumber(), account.getAccountBalance(), account.getAccountType());
+        return String.format("First name: %s%nLast name: %s%nDate of birth: %s%nAge: %s%nOccupation:%s%nAddress: %s%nPhone number: %s%nGender: %s%nAccount number: %s%nAccount balance: %s%nAccount type: %s BANK",
+                firstName, lastName, dateOfBirth.dateOfBirthToString(), calculateAge(), occupation,address, phoneNumber, gender, account.getAccountNumber(), account.getAccountBalance(), account.getAccountType());
     }
 
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    public int getMonthOfBirth() {
+        return monthOfBirth;
+    }
+
+    public int getDayOfBirth() {
+        return dayOfBirth;
+    }
+
+    private int calculateAge(){
+        int currentYear = LocalDate.now().getYear();
+        System.out.println(getYearOfBirth());
+        return (currentYear - getYearOfBirth());
+    }
 
 
 }

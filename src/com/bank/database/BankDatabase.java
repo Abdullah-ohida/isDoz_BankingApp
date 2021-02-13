@@ -1,11 +1,10 @@
 package com.bank.database;
-
 import com.bank.customer.Customer;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class BankDatabase {
-    private ArrayList<Customer> customers;
+    private List<Customer> customers;
 
     public BankDatabase() {
         customers = new ArrayList<>();

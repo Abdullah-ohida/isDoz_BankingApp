@@ -85,7 +85,11 @@ public class Main {
         System.out.print("Enter account type: ");
         String accountType = userInput.nextLine();
 
-        Customer customer = new Customer(firstName, lastName, dateOfBirth, occupation, address, phoneNumber, gender, accountType);
+        int year = 2001;
+        int month = 2;
+        int day = 13;
+
+        Customer customer = new Customer(firstName, lastName, occupation, address, phoneNumber, gender, accountType, year, month, day);
         database.addCustomerToDatabases(customer);
         System.out.println("Account created successfully\n");
     }

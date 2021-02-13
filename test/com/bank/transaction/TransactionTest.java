@@ -62,6 +62,31 @@ class TransactionTest {
         assertEquals(accountNumber, transaction.getAccountNumber());
     }
 
+    @Test
+    void transaction_hasTimeTransactionBeenProcessed(){
+        String accountNumber = account.getAccountNumber();
+        int amount = 700;
+
+        boolean isSuccessful = account.performTransaction(TransactionType.DEPOSIT, accountNumber, amount);
+        transaction = new Transaction(accountNumber, 700,account.getTransactionType());
+
+        assertTrue(isSuccessful);
+        assertNotNull(transaction.getDate().timeToStringFormat());
+    }
+
+    @Test
+    void transaction_hasDateTransactionBeenProcessed(){
+        String accountNumber = account.getAccountNumber();
+        int amount = 700;
+
+        boolean isSuccessful = account.performTransaction(TransactionType.DEPOSIT, accountNumber, amount);
+        transaction = new Transaction(accountNumber, 700,account.getTransactionType());
+
+        assertNotNull(transaction.getDate().dateToStringFormat());
+        System.out.println(transaction.getDate().dateToStringFormat());
+        assertTrue(isSuccessful);
+    }
+
 
     @Test
     void transaction_canShowMessage(){

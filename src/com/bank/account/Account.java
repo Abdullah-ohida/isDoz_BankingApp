@@ -17,6 +17,7 @@ public class Account {
     public Account(AccountType accountType) {
         this.accountNumber = generateAccountNumber();
         this.accountType = accountType;
+        transactions = new ArrayList<>();
     }
 
     public TransactionType getTransactionType() {
@@ -41,14 +42,24 @@ public class Account {
         return accountType;
     }
 
-    public void setTransactionType(TransactionType transactionType, boolean isSuccessful) {
+    private void setTransactionType(TransactionType transactionType, boolean isSuccessful) {
         if (isSuccessful){
             this.transactionType = transactionType;
         }
-
     }
 
-    public boolean performTransaction(TransactionType transactionType, String accountNumber, int amount){
+    public boolean showAllCustomerTransaction(String accountNumber){
+        boolean exist = false;
+        for (Transaction transaction : transactions){
+            if(checkAccountNumber(accountNumber)) {
+                System.out.println(transaction.showAlert());
+                exist = true;
+            }
+        }
+        return exist;
+    }
+
+    public boolean performTransaction(TransactionType transactionType, String accountNumber, double amount){
         this.transactionType = transactionType;
         boolean isSuccessful;
         if(transactionType == TransactionType.WITHDRAWAL){
@@ -57,10 +68,17 @@ public class Account {
         }else {
             isSuccessful = deposit(accountNumber, amount);
         }
+        addTransaction(new Transaction(accountNumber, amount, TransactionType.DEPOSIT));
         return isSuccessful;
     }
 
-    public boolean deposit(String accountNumber, int amount) {
+    private void addTransaction(Transaction transaction){
+        if(checkAccountNumber(transaction.getAccountNumber())){
+            transactions.add(transaction);
+        }
+    }
+
+    public boolean deposit(String accountNumber, double amount) {
         final double MINIMUM_AMOUNT = 0.0;
         boolean isValid = false;
         if(checkAccountNumber(accountNumber)){
@@ -76,7 +94,7 @@ public class Account {
         return this.accountNumber.equals(accountNumber);
     }
 
-    boolean withdrawal(String accountNumber, int amount) {
+    boolean withdrawal(String accountNumber, double amount) {
         boolean isValid = false;
         if(checkAccountNumber(accountNumber)){
             if(amount <= balance){
@@ -86,4 +104,6 @@ public class Account {
         }
         return isValid;
     }
+
+
 }

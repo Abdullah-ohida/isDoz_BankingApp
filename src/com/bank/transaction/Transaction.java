@@ -1,30 +1,34 @@
 package com.bank.transaction;
 
-import java.time.LocalDate;
+import com.bank.date.DateAndTime;
 
 public class Transaction {
     private String accountNumber;
-    private int transactionAmount;
+    private double transactionAmount;
     private TransactionType transactionType;
-    private LocalDate localDate;
+    private DateAndTime dateAndTime;
 
-    public Transaction(String accountNumber, int amount, TransactionType transactionType) {
+    public Transaction(String accountNumber, double amount, TransactionType transactionType) {
         this.accountNumber = accountNumber;
         transactionAmount = amount;
         this.transactionType = transactionType;
-        localDate = LocalDate.now();
+        dateAndTime = new DateAndTime();
     }
 
     public String getAccountNumber() {
         return accountNumber;
     }
 
-    public int getTransactionAmount() {
+    public double getTransactionAmount() {
         return transactionAmount;
     }
     
     public String showAlert(){
-        return String.format("Account number: %s%nAccount type: %s%nAmount transact: Date: %s", accountNumber, transactionType, transactionAmount, localDate.getDayOfWeek() + "/" + localDate.getMonth() + "/" + localDate.getYear());
+        return String.format("Account number: %s%nTransaction type: %s%nTransaction amount : %s%nTime of transaction: %s%nDate of transaction: %s%n===========================================\n",
+                accountNumber, transactionType, transactionAmount, dateAndTime.timeToStringFormat(), dateAndTime.dateToStringFormat());
     }
 
+    public DateAndTime getDate() {
+        return dateAndTime;
+    }
 }

@@ -1,5 +1,6 @@
 package com.bank.customer;
 
+import com.bank.transaction.TransactionType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,11 +10,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerTest {
 
     Customer newCustomer;
+    Customer newCustomer1;
 
     @BeforeEach
     void setUp() {
-        newCustomer = new Customer("DonDozie", "MoneyMan", "19/8/1900",
-                "Software Engineer", "Sabo", "12345677", "Male", "savings");
+        newCustomer = new Customer("DonDozie", "MoneyMan",
+                "Software Engineer", "Sabo", "12345677", "Male", "savings", 1997, 8, 7);
+
+        newCustomer1 = new Customer("Ismail", "MoneyMan",
+                "Software Engineer", "Sabo", "12345677", "Male", "savings", 2001, 8, 12);
     }
 
     @AfterEach
@@ -41,17 +46,6 @@ class CustomerTest {
     void customer_canSetLastName(){
         newCustomer.setLastName("Billy");
         assertEquals("Billy", newCustomer.getLastName());
-    }
-
-    @Test
-    void customer_hasADateOfBirth(){
-        assertNotNull(newCustomer.getDateOfBirth());
-    }
-
-    @Test
-    void customer_canSetDataOfBirth(){
-        newCustomer.setDateOfBirth("7/8/2001");
-        assertEquals("7/8/2001", newCustomer.getDateOfBirth());
     }
 
     @Test
@@ -84,6 +78,39 @@ class CustomerTest {
         assertNotNull(newCustomer.getAccount().getAccountNumber());
     }
 
+    @Test
+    void customer_canDepositToAccount(){
+        double amount = 9000;
+        String accountNumber = newCustomer.getAccount().getAccountNumber();
+        newCustomer.getAccount().performTransaction(TransactionType.DEPOSIT, accountNumber, amount);
+        assertEquals(9000, newCustomer.getAccount().getAccountBalance());
+    }
 
+    @Test
+    void customer_canWithdrawFromAccount(){
+        double amount = 9000;
+        String accountNumber = newCustomer.getAccount().getAccountNumber();
+        newCustomer.getAccount().performTransaction(TransactionType.DEPOSIT, accountNumber, amount);
+
+        newCustomer.getAccount().performTransaction(TransactionType.WITHDRAWAL, accountNumber, 900);
+        assertEquals(8100, newCustomer.getAccount().getAccountBalance());
+    }
+
+    @Test
+    void customer_canShowTransactionOfACustomer(){
+        double amount = 9000;
+        String accountNumber = newCustomer.getAccount().getAccountNumber();
+        newCustomer.getAccount().performTransaction(TransactionType.DEPOSIT, accountNumber, amount);
+        newCustomer.getAccount().performTransaction(TransactionType.WITHDRAWAL, accountNumber, 900);
+
+        newCustomer1.getAccount().performTransaction(TransactionType.DEPOSIT, newCustomer1.getAccount().getAccountNumber(), 300);
+
+        boolean exist  = newCustomer.getAccount().showAllCustomerTransaction(accountNumber);
+        assertTrue(exist);
+
+        exist  = newCustomer1.getAccount().showAllCustomerTransaction(newCustomer1.getAccount().getAccountNumber());
+        assertTrue(exist);
+
+    }
 
 }
