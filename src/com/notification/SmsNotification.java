@@ -6,11 +6,12 @@ import com.model.Transaction;
 public class SmsNotification implements NotificationService{
     @Override
     public Alert createAlert(Account account, Transaction transaction) {
-        return null;
+        Alert alert = new SmsAlert(account, transaction);
+        return alert;
     }
 
     @Override
     public void notify(Alert alert) {
-
+        System.out.println(alert);
     }
 }

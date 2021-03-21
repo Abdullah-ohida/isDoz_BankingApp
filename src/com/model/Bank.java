@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.model.TransactionType.*;
+
 public class Bank implements Storable {
     private final String bankFullName;
     private final String bankShortName;
@@ -157,10 +159,27 @@ public class Bank implements Storable {
     }
 
     public void withDrawMoneyFrom(String accountNumber, BigDecimal amountToWithdraw, int accountPin) throws WithdrawFailedException {
-        withDrawMoneyFrom(accountNumber,amountToWithdraw,accountPin, TransactionType.DEBIT);
+        withDrawMoneyFrom(accountNumber,amountToWithdraw,accountPin, DEBIT);
     }
 
     public void depositMoneyIntoAccount(BigDecimal amountToDeposit, String accountNumber) throws DepositFailedException {
-        depositMoneyIntoAccount(amountToDeposit, accountNumber, TransactionType.CREDIT);
+        depositMoneyIntoAccount(amountToDeposit, accountNumber, CREDIT);
     }
+
+    public void transfer(TransferRequest transferRequest) throws WithdrawFailedException, DepositFailedException {
+        Optional<Account> senderAccount = accountCentralDB.findByAccountNumber(transferRequest.getSenderAccountNumber());
+        Optional<Account> receiverAccount = accountCentralDB.findByAccountNumber(transferRequest.getRecipientAccountNumber());
+        if(senderAccount.isPresent() && receiverAccount.isPresent()){
+            withDrawMoneyFrom(transferRequest.getSenderAccountNumber(), transferRequest.getAmountToTransfer(), transferRequest.getSenderAccountPin(), TRANSFER_OUT);
+            depositMoneyIntoAccount(transferRequest.getAmountToTransfer(), transferRequest.getRecipientAccountNumber(), TRANSFER_IN);
+        }
+    }
+
+    public void transfer(TransferRequest transferRequest, String receivingBankShortName) throws BankingApplicationException {
+        CentralBank centralBank = CentralBank.createCentralBank();
+        transferRequest.setRecipientBank(receivingBankShortName);
+        transferRequest.setSenderBank(this);
+        centralBank.transferFundsWith(transferRequest);
+    }
+
 }

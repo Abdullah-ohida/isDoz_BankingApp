@@ -2,10 +2,10 @@ import com.Account;
 import com.exception.BankingApplicationException;
 import com.exception.DepositFailedException;
 import com.exception.WithdrawFailedException;
-import com.model.AccountType;
-import com.model.Bank;
-import com.model.CentralBank;
-import com.model.Customer;
+import com.model.*;
+import com.notification.Alert;
+import com.notification.NotificationService;
+import com.notification.SmsNotification;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -244,7 +244,98 @@ class BankAppTest {
         assertThrows(WithdrawFailedException.class, ()-> gtBank.withDrawMoneyFrom(kelvinAccountNumber, BigDecimal.valueOf(1500), 1234));
     }
 
+    @Test
+    void transferRequest_canBeCreated(){
+        TransferRequest transferRequest = new TransferRequest(BigDecimal.valueOf(100), "1298383747", "1255332364", 1111);
+        assertEquals(transferRequest.getAmountToTransfer(), BigDecimal.valueOf(100));
+        assertEquals(transferRequest.getRecipientAccountNumber(), "1255332364");
+        assertEquals(transferRequest.getSenderAccountNumber(), "1298383747");
+        assertEquals(transferRequest.getSenderAccountPin(), 1111);
+    }
+
+    @Test
+    void customers_canDoIntraBankTransfer() throws DepositFailedException, WithdrawFailedException {
+        Customer chibuzo = new Customer("Chibuzo", "Gabriel", "semicolon");
+        gtBank.register(chibuzo, AccountType.SAVINGS);
+        Account chibuzoAccount = chibuzo.getMyAccount().get(0);
+        String chibuzoAccountNumber = chibuzoAccount.getAccountNumber();
+        chibuzoAccount.updatePin(0, 1234);
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(3000), chibuzoAccountNumber);
+
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+        kelvinAccount.updatePin(0, 1111);
+
+        gtBank.transfer(new TransferRequest(BigDecimal.valueOf(2000), chibuzoAccountNumber, kelvinAccountNumber, 1234));
+
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(2000));
+        assertEquals(chibuzoAccount.calculateAccountBalance(), BigDecimal.valueOf(1000));
+
+        gtBank.transfer(new TransferRequest(BigDecimal.valueOf(2000), kelvinAccountNumber, chibuzoAccountNumber, 1111));
+
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(0));
+        assertEquals(chibuzoAccount.calculateAccountBalance(), BigDecimal.valueOf(3000));
+    }
+
+    @Test
+    void customers_getAListOfTransactionOnSuccessfulTransaction() throws DepositFailedException, WithdrawFailedException {
+        Customer chibuzo = new Customer("Chibuzo", "Gabriel", "semicolon");
+        gtBank.register(chibuzo, AccountType.SAVINGS);
+        Account chibuzoAccount = chibuzo.getMyAccount().get(0);
+        String chibuzoAccountNumber = chibuzoAccount.getAccountNumber();
+        chibuzoAccount.updatePin(0, 1234);
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(3000), chibuzoAccountNumber);
+
+        assertEquals(chibuzoAccount.getTransactions().size(), 1);
+
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(2000), chibuzoAccountNumber);
+
+        assertEquals(chibuzoAccount.getTransactions().size(),2);
 
 
+        gtBank.withDrawMoneyFrom(chibuzoAccountNumber, BigDecimal.valueOf(1200), 1234);
+
+        assertEquals(chibuzoAccount.getTransactions().size(), 3);
+
+    }
+
+    @Test
+    void customers_canTransferFunds_viaCbn() throws BankingApplicationException {
+        Customer chibuzo = new Customer("Chibuzo", "Gabriel", "semicolon");
+        gtBank.register(chibuzo, AccountType.SAVINGS);
+        Account chibuzoAccount = chibuzo.getMyAccount().get(0);
+        String chibuzoAccountNumber = chibuzoAccount.getAccountNumber();
+        chibuzoAccount.updatePin(0, 1234);
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(2500), chibuzoAccountNumber);
+
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+        kelvinAccount.updatePin(0, 1111);
+
+        gtBank.transfer(new TransferRequest(BigDecimal.valueOf(1000), chibuzoAccountNumber, kelvinAccountNumber, 1234), "fbn");
+
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(1000));
+        assertEquals(chibuzoAccount.calculateAccountBalance(), BigDecimal.valueOf(1500));
+    }
+
+    @Test
+    void notificationService_canCreateAlert_fromCompletedTransaction() throws DepositFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+        kelvinAccount.updatePin(0, 1111);
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(25000), kelvinAccountNumber);
+
+        Transaction transaction = kelvinAccount.getTransactions().get(0);
+        NotificationService notifier = new SmsNotification();
+        Alert alert = notifier.createAlert(kelvinAccount, transaction);
+        assertNotNull(alert);
+        System.out.println(alert);
+    }
 
 }

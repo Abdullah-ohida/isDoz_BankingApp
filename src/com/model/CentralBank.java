@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.model.TransactionType.*;
+
 public class CentralBank {
     private final CentralDBImp<Bank> registeredBanks;
     private final Map<String, Customer> bvnDatabase;
@@ -73,5 +75,14 @@ public class CentralBank {
 
     private static class CentralBankSingleTonHelper{
         private static final CentralBank instance = new CentralBank();
+    }
+
+    public void transferFundsWith(TransferRequest transferRequest) throws BankingApplicationException {
+        Optional<Bank> recipientBank = Optional.ofNullable(findBankByBankCode(transferRequest.getRecipientAccountNumber()));
+        boolean recipientBankExist = recipientBank.isPresent();
+        if (recipientBankExist){
+            recipientBank.get().depositMoneyIntoAccount(transferRequest.getAmountToTransfer(), transferRequest.getRecipientAccountNumber(), TRANSFER_IN);
+            transferRequest.getSenderBank().withDrawMoneyFrom(transferRequest.getSenderAccountNumber(), transferRequest.getAmountToTransfer(), transferRequest.getSenderAccountPin(), TRANSFER_OUT);
+        }
     }
 }

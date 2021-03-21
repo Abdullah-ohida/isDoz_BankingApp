@@ -29,4 +29,12 @@ public class Transaction {
     public BigDecimal getTransactionAmount() {
         return transactionAmount;
     }
+
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
+
+    public String getActorName() {
+        return actorName;
+    }
 }
