@@ -1,6 +1,7 @@
 import com.Account;
 import com.exception.BankingApplicationException;
 import com.exception.DepositFailedException;
+import com.exception.WithdrawFailedException;
 import com.model.AccountType;
 import com.model.Bank;
 import com.model.CentralBank;
@@ -10,21 +11,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankAppTest {
     CentralBank centralBankOfNigeria;
     Bank gtBank;
-    Customer chibuzor;
+    Bank firstBank;
 
     @BeforeEach
     public void setUp(){
         centralBankOfNigeria = new CentralBank();
         gtBank = centralBankOfNigeria.registerNewBank("Guarantee Trust Bank PLC", "Trust Bank PLC");
-        Customer customer = new Customer("Kelvin", "frank", "Plateau");
 
+        firstBank = centralBankOfNigeria.registerNewBank("First Bank PLC", "FBN");
     }
 
     @AfterEach
@@ -126,7 +126,7 @@ class BankAppTest {
     }
 
     @Test
-    void customer_maintainsOneBvn_acrossMultipleBanks() throws DepositFailedException {
+    void customer_maintainsOneBvn_acrossMultipleBanks() throws DepositFailedException, WithdrawFailedException {
         Customer chibuzor = new Customer("Chibuzo", "Gabriel", "Semicolon Village");
         gtBank.register(chibuzor, AccountType.SAVINGS);
 
@@ -142,6 +142,109 @@ class BankAppTest {
         gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(4000), chibuzor.getMyAccount().get(0).getAccountNumber());
         System.out.println(chibuzor);
 
-        gtBank.withDrawMoneyFrom(chibuzor.getMyAccount().get(0).getAccountNumber(), BigInteger.valueOf(3000), 1234);
+        gtBank.withDrawMoneyFrom(chibuzor.getMyAccount().get(0).getAccountNumber(), BigDecimal.valueOf(3000), 1234);
     }
+
+    @Test
+    void customer_getsBankSpecificAccountNumber_whenHeCreatedAnAccount(){
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+
+        String customerGtBankAccountNumber = kelvin.getMyAccount().get(0).getAccountNumber();
+        firstBank.register(kelvin, AccountType.KIDDES);
+        String customerFirstBankAccountNumber = kelvin.getMyAccount().get(1).getAccountNumber();
+
+        assertEquals(customerGtBankAccountNumber.length(), 10);
+        assertNotEquals(customerFirstBankAccountNumber, customerGtBankAccountNumber);
+        System.out.println(kelvin);
+    }
+
+    @Test
+    void customer_canDepositMoneyFromBank_WithTheirAccountNumber() throws DepositFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(1000), kelvinAccountNumber);
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(1000));
+    }
+
+    @Test
+    void customer_canWithdrawMoney_inTheirAccount() throws DepositFailedException, WithdrawFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+
+        kelvinAccount.updatePin(0, 1234);
+
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(1000), kelvinAccountNumber);
+        gtBank.withDrawMoneyFrom(kelvinAccountNumber, BigDecimal.valueOf(500), 1234);
+
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(500));
+
+    }
+
+
+    @Test
+    void customer_cantWithdrawMoney_ifPinIsNotSet() throws DepositFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(1000), kelvinAccountNumber);
+        assertThrows(WithdrawFailedException.class, ()->gtBank.withDrawMoneyFrom(kelvinAccountNumber, BigDecimal.valueOf(400), 1111));
+
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(1000));
+        System.out.println(kelvinAccount);
+    }
+
+    @Test
+    void customer_cantWithdrawMoney_ifPinIsWrong() throws DepositFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+
+        kelvinAccount.updatePin(0, 1234);
+
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(1000), kelvinAccountNumber);
+        assertThrows(WithdrawFailedException.class, ()-> gtBank.withDrawMoneyFrom(kelvinAccountNumber, BigDecimal.valueOf(599), 1111));
+
+        assertEquals(kelvinAccount.calculateAccountBalance(), BigDecimal.valueOf(1000));
+    }
+
+
+    @Test
+    void customer_cantWithdraw_ifAccountNumberIsWrong() throws DepositFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+
+        kelvinAccount.updatePin(0, 1234);
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(1000), kelvinAccountNumber);
+
+        assertThrows(WithdrawFailedException.class, ()-> gtBank.withDrawMoneyFrom("234567891", BigDecimal.valueOf(500), 1234));
+    }
+
+    @Test
+    void customer_cantWithdrawMoney_ifAccountIsLow() throws DepositFailedException {
+        Customer kelvin = new Customer("Kelvin", "frank", "Plateau");
+        gtBank.register(kelvin, AccountType.SAVINGS);
+        Account kelvinAccount = kelvin.getMyAccount().get(0);
+        String kelvinAccountNumber = kelvinAccount.getAccountNumber();
+
+        kelvinAccount.updatePin(0, 1234);
+        gtBank.depositMoneyIntoAccount(BigDecimal.valueOf(1000), kelvinAccountNumber);
+
+        assertThrows(WithdrawFailedException.class, ()-> gtBank.withDrawMoneyFrom(kelvinAccountNumber, BigDecimal.valueOf(1500), 1234));
+    }
+
+
+
+
 }

@@ -5,6 +5,7 @@ import com.database.CentralDBImp;
 import com.database.Storable;
 import com.exception.BankingApplicationException;
 import com.exception.DepositFailedException;
+import com.exception.WithdrawFailedException;
 import com.notification.NotificationService;
 import com.notification.SmsNotification;
 
@@ -147,7 +148,17 @@ public class Bank implements Storable {
         return accountNumber + transactionPrefix + LocalDateTime.now();
     }
 
-    public void withDrawMoneyFrom(String accountNumber, BigInteger amount, int pin) {
+    public void withDrawMoneyFrom(String accountNumber, BigDecimal amountToWithdraw, int accountPin, TransactionType transactionType) throws WithdrawFailedException {
+        Optional<Account> optionalAccount = accountCentralDB.findByAccountNumber(accountNumber);
+        if(optionalAccount.isPresent()){
+            optionalAccount.get().verifyLegibilityForWithdraw(amountToWithdraw, accountPin);
+        }else throw new WithdrawFailedException("Account not found");
+
+        notifyCustomerViaSms((savesTransaction(optionalAccount.get(), transactionType, amountToWithdraw)), optionalAccount.get());
+    }
+
+    public void withDrawMoneyFrom(String accountNumber, BigDecimal amountToWithdraw, int accountPin) throws WithdrawFailedException {
+        withDrawMoneyFrom(accountNumber,amountToWithdraw,accountPin, TransactionType.DEBIT);
     }
 
     public void depositMoneyIntoAccount(BigDecimal amountToDeposit, String accountNumber) throws DepositFailedException {

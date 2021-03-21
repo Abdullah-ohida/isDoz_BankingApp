@@ -52,4 +52,26 @@ public class Customer {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder customerProfile= new StringBuilder();
+
+
+        if(accounts.size()>0){
+            customerProfile.append("My Account List\n");
+        }
+        for(Account account: accounts.findAll()){
+            profileTemplate(customerProfile);
+            customerProfile.append(account.toString()).append("\n\n");
+        }
+
+        return customerProfile.toString();
+    }
+
+    private void profileTemplate(StringBuilder customerProfile) {
+        customerProfile.append("First Name: ").append(firstName).append("\n");
+        customerProfile.append("Last Name: ").append(lastName).append("\n");
+        customerProfile.append("Address: ").append(address).append("\n\n");
+    }
 }
