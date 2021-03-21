@@ -10,7 +10,6 @@ import com.notification.NotificationService;
 import com.notification.SmsNotification;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -53,11 +52,11 @@ public class Bank implements Storable {
 
     private String generateAccountNumberForCustomer() {
         String accountNumber = bankCode + String.format("%03d", accountCentralDB.size() + 1);
-        accountNumber = accountNumber + generateCheckDigit(bankCode, accountNumber);
+        accountNumber = accountNumber + checkDigit(bankCode, accountNumber);
         return accountNumber;
     }
 
-    private String generateCheckDigit(String bankCode, String accountNumber) {
+    private String checkDigit(String bankCode, String accountNumber) {
         String numberToVerify = bankCode + accountNumber;
         int[] checkDigitMultiplier = {3,7,3,3,7,3,3,7,3,3,7,3,3,7,3};
         int result = 0;
